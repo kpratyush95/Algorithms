@@ -4,6 +4,9 @@ class Node():
         self.right = None
         self.key = value
         self.parent = None
+class Tree():
+    def __init__(self):
+        self.root = None
 
 def  Tree_Search(node,value):
     if ((node==None) or (node.key == value)):
@@ -67,3 +70,26 @@ def Inorder_Travaersal(root):
         print(root.key)
         Inorder_Travaersal(root.right)
 
+def Transplant(T, node1, node2):
+    if node1.parent is None:
+        T.root = node2
+    elif(node1==node1.parent.left):
+        node1.parent.left = node2
+    else :
+        node1.parent.right = node2
+    if(node2 is not None):
+        node2.parent = node1.parent
+
+def Tree_Delete(T,node):
+    if node.left is None:
+        Transplant(T,node,node.right)
+    elif node.right is None:
+        Transplant(T, node, node.left)
+    else:
+        walker = Tree_Minimum(node.right)
+        if walker.parent != node:
+            Transplant(T, walker, walker.right)
+            walker.right = node.right
+        Transplant(T, node, walker)
+        walker.left = node.left
+        walker.left.parent = walker
